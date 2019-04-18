@@ -1,12 +1,9 @@
 import domain.Movie;
 import domain.MovieRepository;
-import domain.PlaySchedule;
 import domain.ReservationInfo;
 import view.InputView;
 import view.OutputView;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieApplication {
@@ -27,6 +24,7 @@ public class MovieApplication {
                 reservationInfo.addChosenTime(movieTime);
                 int moviePeople = InputView.inputMovieReservePerson();
                 reservationInfo.addChosenPeople(movieTime, moviePeople);
+                System.out.println(reservationInfo.getChosenMovie() + " " + reservationInfo.getChosenTimes() + " " + reservationInfo.getChosenPeople());
                 check = InputView.inputReserveOrPurchase();
             }
 

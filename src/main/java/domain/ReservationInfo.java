@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.DateTimeUtils.format;
 import static utils.DateTimeUtils.isOneHourWithinRange;
 
 public class ReservationInfo {
-    private List<Movie> chosenMovie = new ArrayList<>();
-    private List<LocalDateTime> chosenTimes = new ArrayList<>();
-    private List<Integer> chosenPeople = new ArrayList<>();
+    private static List<Movie> chosenMovie = new ArrayList<>();
+    private static List<LocalDateTime> chosenTimes = new ArrayList<>();
+    private static List<Integer> chosenPeople = new ArrayList<>();
 
     public List<Movie> getChosenMovie() {
         return chosenMovie;
@@ -47,10 +46,14 @@ public class ReservationInfo {
         PlaySchedule playSchedule = chosenMovie.get(chosenMovie.size() - 1).getPlaySchedules().get(index - 1);
         if (people > playSchedule.getCapacity()) {
             System.out.println("예매 가능 인원을 초과하였습니다.");
+            chosenMovie.remove(chosenMovie.size() - 1);
+            chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
         if (people <= 0) {
             System.out.println("잘못된 값을 입력하였습니다.");
+            chosenMovie.remove(chosenMovie.size() - 1);
+            chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
         playSchedule.reserve(people);
@@ -60,12 +63,12 @@ public class ReservationInfo {
     /*
      * 상영 시작 시간이 현재 시각보다 나중인지 판단한다
      */
-    public boolean judgeStartTime(LocalDateTime localDateTime) {
+    public void judgeStartTime(LocalDateTime localDateTime) {
         if (localDateTime.isBefore(LocalDateTime.now())) {
             System.out.println("상영 시작 시간이 이미 지난 영화입니다.");
-            return false;
+            chosenMovie.remove(chosenMovie.size() - 1);
+            throw new IllegalArgumentException();
         }
-        return true;
     }
 
     /*
@@ -78,6 +81,7 @@ public class ReservationInfo {
         }
         if ((chosenTimes.size() > 1) && (answer == true)) {
             System.out.println("두 영화의 시간 차이가 1시간 이내입니다.");
+            chosenMovie.remove(chosenMovie.size() - 1);
             throw new IllegalArgumentException();
         }
     }
