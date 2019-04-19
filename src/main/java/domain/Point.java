@@ -16,7 +16,7 @@ public class Point {
     }
 
     /*
-     * 예약 완료 후 포인트 사용할 지 여부
+     * 포인트 사용할 지 여부
      */
     public void usePoint() {
         try {

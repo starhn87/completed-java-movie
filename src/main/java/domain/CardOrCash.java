@@ -18,7 +18,7 @@ public class CardOrCash {
     }
 
     /*
-     * 신용카드 or 현금 선택
+     * 카드 or 현금 선택
      */
     public void choice() {
         try {

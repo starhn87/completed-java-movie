@@ -41,7 +41,7 @@ public class OutputView {
         List<LocalDateTime> times = reservationInfo.getChosenTimes();
         List<Integer> people = reservationInfo.getChosenPeople();
         for (int i = 0; i < movies.size(); i++) {
-            System.out.println(movies.get(i).toStringTitile());
+            System.out.println(movies.get(i).toStringTitle());
             System.out.println("시작시간: " + format(times.get(i)));
             System.out.println("예약 인원: " + people.get(i) + "명\n");
         }

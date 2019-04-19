@@ -44,7 +44,7 @@ public class Movie {
                 + sb.toString();
     }
 
-    public String toStringTitile() {
+    public String toStringTitle() {
         StringBuilder sb = new StringBuilder();
         for (PlaySchedule playSchedule : playSchedules) {
             sb.append(playSchedule);

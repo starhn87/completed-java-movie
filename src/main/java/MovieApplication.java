@@ -32,21 +32,6 @@ public class MovieApplication {
     }
 
     /*
-     * 포인트 사용 관련 처리
-     */
-    public static int givePoint() {
-        point = new Point();
-        point.usePoint();
-        return point.getPointNum();
-    }
-
-    public static int choiceResult() {
-        cardOrCash = new CardOrCash();
-        cardOrCash.choice();
-        return cardOrCash.getPayingMethod();
-    }
-
-    /*
      * 영화와 시간, 인원을 선택하는 과정
      */
     public static void reservationProgress(List<Movie> movies) {
@@ -70,6 +55,9 @@ public class MovieApplication {
         }
     }
 
+    /*
+     * 결제 or 추가예약 입력 처리
+     */
     public static void checkReserveOrPurchaseInput() {
         check = InputView.inputReserveOrPurchase();
         if (!(check == 1 || check == 2)) {
@@ -120,6 +108,24 @@ public class MovieApplication {
     }
 
     /*
+     * 포인트 사용 결과
+     */
+    public static int givePoint() {
+        point = new Point();
+        point.usePoint();
+        return point.getPointNum();
+    }
+
+    /*
+     * 카드 or 현금 선택 결과
+     */
+    public static int choiceResult() {
+        cardOrCash = new CardOrCash();
+        cardOrCash.choice();
+        return cardOrCash.getPayingMethod();
+    }
+
+    /*
      * 최종 지불할 금액 계산
      */
     public static int finalPayment(int pointNum, int payingMethod) {
@@ -133,5 +139,4 @@ public class MovieApplication {
         }
         return (int) money;
     }
-    // TODO 컨벤션 및 프로그래밍 요구사항에 맞게 수정
 }
