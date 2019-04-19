@@ -14,6 +14,7 @@ public class MovieApplication {
     private static final double CASH_DISCOUNT = 0.98;
     private static int payingMethod;
     private static int point;
+    private static int check;
     private static ReservationInfo reservationInfo;
 
     /*
@@ -49,10 +50,16 @@ public class MovieApplication {
      * 결제 or 추가예약 선택
      */
     public static void reserverOrPurchase(List<Movie> movies) {
-        int check = 0;
         while (check != 1) {
             reservationProgress(movies);
-            check = InputView.inputReserveOrPurchase();
+            checkInput();
+        }
+    }
+
+    public static void checkInput() {
+        check = InputView.inputReserveOrPurchase();
+        if (!(check == 1 || check == 2)) {
+            checkInput();
         }
     }
 
