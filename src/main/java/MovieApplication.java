@@ -9,6 +9,10 @@ import java.util.List;
 
 public class MovieApplication {
     private static ReservationInfo reservationInfo;
+    private static final int CARD = 1;
+    private static final int CASH = 2;
+    private static final double CARD_DISCOUNT = 0.95;
+    private static final double CASH_DISCOUNT = 0.98;
 
     public static void main(String[] args) {
         List<Movie> movies = MovieRepository.getMovies();
