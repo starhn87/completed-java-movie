@@ -1,21 +1,20 @@
-import domain.Movie;
-import domain.MovieRepository;
-import domain.ReservationInfo;
+import domain.*;
 import view.InputView;
 import view.OutputView;
+
+import static domain.CardOrCash.CARD;
+import static domain.CardOrCash.CASH;
 
 import java.util.InputMismatchException;
 import java.util.List;
 
 public class MovieApplication {
-    private static final int CARD = 1;
-    private static final int CASH = 2;
-    private static final double CARD_DISCOUNT = 0.95;
-    private static final double CASH_DISCOUNT = 0.98;
-    private static int payingMethod;
-    private static int point;
+    public static final double CARD_DISCOUNT = 0.95;
+    public static final double CASH_DISCOUNT = 0.98;
     private static int check;
     private static ReservationInfo reservationInfo;
+    private static Point point;
+    private static CardOrCash cardOrCash;
 
     /*
      * 예약 및 결제의 과정 진행 (main 메소드)
@@ -26,10 +25,25 @@ public class MovieApplication {
 
         reserveUntilFine(movies);
         OutputView.printReservation(reservationInfo);
-        payPoint();
-        cardOrCash();
-        int payment = finalPayment();
+        int pointNum = givePoint();
+        int payingMethod = choiceResult();
+        int payment = finalPayment(pointNum, payingMethod);
         OutputView.printFinalPayment(payment);
+    }
+
+    /*
+     * 포인트 사용 관련 처리
+     */
+    public static int givePoint() {
+        point = new Point();
+        point.usePoint();
+        return point.getPointNum();
+    }
+
+    public static int choiceResult() {
+        cardOrCash = new CardOrCash();
+        cardOrCash.choice();
+        return cardOrCash.getPayingMethod();
     }
 
     /*
@@ -52,14 +66,14 @@ public class MovieApplication {
     public static void reserverOrPurchase(List<Movie> movies) {
         while (check != 1) {
             reservationProgress(movies);
-            checkInput();
+            checkReserveOrPurchaseInput();
         }
     }
 
-    public static void checkInput() {
+    public static void checkReserveOrPurchaseInput() {
         check = InputView.inputReserveOrPurchase();
         if (!(check == 1 || check == 2)) {
-            checkInput();
+            checkReserveOrPurchaseInput();
         }
     }
 
@@ -106,47 +120,11 @@ public class MovieApplication {
     }
 
     /*
-     * 예약 완료 후 포인트 사용할 지 여부
-     */
-    public static void payPoint() {
-        try {
-            point = InputView.inputPoint();
-            if (point < 0) {
-                throw new IllegalArgumentException();
-            }
-        } catch (InputMismatchException e) {
-            System.out.println("잘못된 입력입니다. 예약을 처음부터 다시 진행해주세요.\n");
-            System.exit(-1);
-        } catch (IllegalArgumentException e) {
-            System.out.println("음수를 입력하셨습니다. 다시 입력해주세요.\n");
-            payPoint();
-        }
-    }
-
-    /*
-     * 신용카드 or 현금 선택
-     */
-    public static void cardOrCash() {
-        try {
-            payingMethod = InputView.inputCardOrCash();
-            if (!(payingMethod == CARD || payingMethod == CASH)) {
-                throw new IllegalArgumentException();
-            }
-        } catch (InputMismatchException e) {
-            System.out.println("잘못된 입력입니다. 예약을 처음부터 다시 진행해주세요.");
-            System.exit(-1);
-        } catch (IllegalArgumentException e) {
-            System.out.println("잘못된 범위의 값입니다. 다시 입력해주세요.");
-            cardOrCash();
-        }
-    }
-
-    /*
      * 최종 지불할 금액 계산
      */
-    public static int finalPayment() {
+    public static int finalPayment(int pointNum, int payingMethod) {
         double money = reservationInfo.howMuch();
-        money -= point;
+        money -= pointNum;
         if (payingMethod == CARD) {
             money = money * CARD_DISCOUNT;
         }
