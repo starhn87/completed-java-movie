@@ -20,6 +20,10 @@ public class MovieApplication {
 
         reserveUntilFine(movies);
         OutputView.printReservation(reservationInfo);
+        int point = payPoint();
+        int payingMethod = cardOrCash();
+        int payment = finalPayment(point, payingMethod);
+        OutputView.printFinalPayment(payment);
     }
 
     /*
