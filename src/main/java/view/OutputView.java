@@ -1,6 +1,7 @@
 package view;
 
 import domain.Movie;
+import domain.ReservationInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,29 +28,23 @@ public class OutputView {
             recognize = (movie.getId() == movieId) ? true : false;
             answer = answer || recognize;
         }
-        System.out.println(movie);
+        if (answer == true) {
+            System.out.println(movie);
+        }
     }
 
     /*
      * 예매 내역 출력
      */
-    public void printReservation(List<Movie> movies, List<LocalDateTime> localDateTimes, List<Integer> list) {
+    public static void printReservation(ReservationInfo reservationInfo) {
         System.out.println("예매 내역");
-        for (int i = 0; i < movies.size()
-                && i < localDateTimes.size()
-                && i < list.size(); i++) {
+        List<Movie> movies = reservationInfo.getChosenMovie();
+        List<LocalDateTime> times = reservationInfo.getChosenTimes();
+        List<Integer> people = reservationInfo.getChosenPeople();
+        for (int i = 0; i < movies.size(); i++) {
             System.out.println(movies.get(i).toStringTitile());
-            System.out.println(format(localDateTimes.get(i)));
-            System.out.println("예약 인원: " + list.get(i) + "명");
-            System.out.println();
+            System.out.println(format(times.get(i)));
+            System.out.println("예약 인원: " + people.get(i) + "명\n");
         }
-    }
-
-    /*
-     * 결제 진행
-     */
-    public static void printPurchase() {
-        System.out.println("## 결제를 진행합니다.");
-        System.out.println("## 포인트 사용 금액을 입력하세요. 포인트가 없으면 0 입력");
     }
 }

@@ -11,18 +11,26 @@ public class ReservationInfo {
     private static List<LocalDateTime> chosenTimes = new ArrayList<>();
     private static List<Integer> chosenPeople = new ArrayList<>();
 
-    public List<Movie> getChosenMovie() {
-        return chosenMovie;
+    public ReservationInfo() {
+
     }
 
-    public List<Integer> getChosenPeople() {
-        return chosenPeople;
+    public List<Movie> getChosenMovie() {
+        return chosenMovie;
     }
 
     public List<LocalDateTime> getChosenTimes() {
         return chosenTimes;
     }
 
+    public List<Integer> getChosenPeople() {
+        return chosenPeople;
+    }
+
+
+    /*
+     * 리스트에 영화 추가
+     */
     public void addChosenMovice(List<Movie> movies, int movieId) {      // TODO 영화 선택을 하면서 바로 오류도 거르게
         Movie movie = null;
         boolean condition = false;
@@ -34,6 +42,9 @@ public class ReservationInfo {
         chosenMovie.add(movie);
     }
 
+    /*
+     * 리스트에 시작시간 추가
+     */
     public void addChosenTime(int schedule) {       // TODO 시간 선택을 하면서 바로 오류도 거르게
         LocalDateTime startTime = chosenMovie.get(chosenMovie.size() - 1).
                 getPlaySchedules().get(schedule - 1).getStartDateTime();
@@ -42,7 +53,10 @@ public class ReservationInfo {
         chosenTimes.add(startTime);
     }
 
-    public void addChosenPeople(int index, int people) {       // // TODO 인원 선택을 하면서 바로 오류도 거르게
+    /*
+     * 리스트에 예약 인원 추가
+     */
+    public void addChosenPeople(int index, int people) {       // TODO 인원 선택을 하면서 바로 오류도 거르게
         PlaySchedule playSchedule = chosenMovie.get(chosenMovie.size() - 1).getPlaySchedules().get(index - 1);
         if (people > playSchedule.getCapacity()) {
             System.out.println("예매 가능 인원을 초과하였습니다.");
@@ -93,6 +107,21 @@ public class ReservationInfo {
         if (movie == null) {
             System.out.println("상영 목록에 없는 영화입니다.");
             throw new IllegalArgumentException();
+        }
+    }
+
+    /*
+     * 예약 중간에 오류 발생시 복구
+     */
+    public void recoveryCancelledPart() {
+        int movieLen = chosenMovie.size();
+        int timeLen = chosenTimes.size();
+        int peopleLen = chosenPeople.size();
+        for (int i = 0; i < movieLen - peopleLen; i++) {
+            chosenMovie.remove(chosenMovie.size() - 1);
+        }
+        for (int i = 0; i < timeLen - peopleLen; i++) {
+            chosenTimes.remove(chosenTimes.size() - 1);
         }
     }
 }
