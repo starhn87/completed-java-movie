@@ -8,21 +8,26 @@ import java.util.InputMismatchException;
 import java.util.List;
 
 public class MovieApplication {
-    private static ReservationInfo reservationInfo;
     private static final int CARD = 1;
     private static final int CASH = 2;
     private static final double CARD_DISCOUNT = 0.95;
     private static final double CASH_DISCOUNT = 0.98;
+    private static int payingMethod;
+    private static int point;
+    private static ReservationInfo reservationInfo;
 
+    /*
+     * 예약 및 결제의 과정 진행 (main 메소드)
+     */
     public static void main(String[] args) {
         List<Movie> movies = MovieRepository.getMovies();
         reservationInfo = new ReservationInfo();
 
         reserveUntilFine(movies);
         OutputView.printReservation(reservationInfo);
-        int point = payPoint();
-        int payingMethod = cardOrCash();
-        int payment = finalPayment(point, payingMethod);
+        payPoint();
+        cardOrCash();
+        int payment = finalPayment();
         OutputView.printFinalPayment(payment);
     }
 
@@ -75,55 +80,52 @@ public class MovieApplication {
     /*
      * 예약 완료 후 포인트 사용할 지 여부
      */
-    public static int payPoint() {
-        int point = -1;
+    public static void payPoint() {
         try {
             point = InputView.inputPoint();
             if (point < 0) {
                 throw new IllegalArgumentException();
             }
         } catch (InputMismatchException e) {
-            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-            payPoint();
+            System.out.println("잘못된 입력입니다. 예약을 처음부터 다시 진행해주세요.\n");
+            System.exit(-1);
         } catch (IllegalArgumentException e) {
-            System.out.println("음수를 입력하셨습니다. 다시 입력해주세요.");
+            System.out.println("음수를 입력하셨습니다. 다시 입력해주세요.\n");
             payPoint();
         }
-        return point;
     }
 
     /*
      * 신용카드 or 현금 선택
      */
-    public static int cardOrCash() {
-        int payingMethod = -1;
+    public static void cardOrCash() {
         try {
             payingMethod = InputView.inputCardOrCash();
-            if (!(payingMethod == 1 || payingMethod == 2)) {
+            if (!(payingMethod == CARD || payingMethod == CASH)) {
                 throw new IllegalArgumentException();
             }
         } catch (InputMismatchException e) {
-            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
-            cardOrCash();
+            System.out.println("잘못된 입력입니다. 예약을 처음부터 다시 진행해주세요.");
+            System.exit(-1);
         } catch (IllegalArgumentException e) {
             System.out.println("잘못된 범위의 값입니다. 다시 입력해주세요.");
             cardOrCash();
         }
-        return payingMethod;
     }
 
     /*
      * 최종 지불할 금액 계산
      */
-    public static int finalPayment(int point, int cardOrCash) {
+    public static int finalPayment() {
         double money = reservationInfo.howMuch();
         money -= point;
-        if (cardOrCash == CARD) {
+        if (payingMethod == CARD) {
             money = money * CARD_DISCOUNT;
         }
-        if (cardOrCash == CASH) {
+        if (payingMethod == CASH) {
             money = money * CASH_DISCOUNT;
         }
         return (int) money;
     }
+    // TODO 컨벤션 및 프로그래밍 요구사항에 맞게 수정
 }

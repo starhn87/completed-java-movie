@@ -31,7 +31,7 @@ public class ReservationInfo {
     /*
      * 리스트에 영화 추가
      */
-    public void addChosenMovice(List<Movie> movies, int movieId) {      // TODO 영화 선택을 하면서 바로 오류도 거르게
+    public void addChosenMovice(List<Movie> movies, int movieId) {
         Movie movie = null;
         boolean condition = false;
         for (int i = 0; i < movies.size() && condition == false; i++) {
@@ -45,7 +45,7 @@ public class ReservationInfo {
     /*
      * 리스트에 시작시간 추가
      */
-    public void addChosenTime(int schedule) {       // TODO 시간 선택을 하면서 바로 오류도 거르게
+    public void addChosenTime(int schedule) {
         LocalDateTime startTime = chosenMovie.get(chosenMovie.size() - 1).
                 getPlaySchedules().get(schedule - 1).getStartDateTime();
         judgeOneHour(startTime);
@@ -56,7 +56,7 @@ public class ReservationInfo {
     /*
      * 리스트에 예약 인원 추가
      */
-    public void addChosenPeople(int index, int people) {       // TODO 인원 선택을 하면서 바로 오류도 거르게
+    public void addChosenPeople(int index, int people) {
         PlaySchedule playSchedule = chosenMovie.get(chosenMovie.size() - 1).getPlaySchedules().get(index - 1);
         if (people > playSchedule.getCapacity()) {
             System.out.println("예매 가능 인원을 초과하였습니다.");
