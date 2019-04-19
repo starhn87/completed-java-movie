@@ -7,9 +7,9 @@ import java.util.List;
 import static utils.DateTimeUtils.isOneHourWithinRange;
 
 public class ReservationInfo {
-    private static List<Movie> chosenMovie = new ArrayList<>();
-    private static List<LocalDateTime> chosenTimes = new ArrayList<>();
-    private static List<Integer> chosenPeople = new ArrayList<>();
+    private List<Movie> chosenMovie = new ArrayList<>();
+    private List<LocalDateTime> chosenTimes = new ArrayList<>();
+    private List<Integer> chosenPeople = new ArrayList<>();
 
     public ReservationInfo() {
 
@@ -59,7 +59,7 @@ public class ReservationInfo {
     public void addChosenPeople(int index, int people) {
         PlaySchedule playSchedule = chosenMovie.get(chosenMovie.size() - 1).getPlaySchedules().get(index - 1);
         handleOverCapacity(playSchedule, people);
-        handleWrongPeople(playSchedule, people);
+        handleWrongPeople(people);
         playSchedule.reserve(people);
         chosenPeople.add(people);
     }
@@ -70,8 +70,6 @@ public class ReservationInfo {
     public void handleOverCapacity(PlaySchedule playSchedule, int people) {
         if (people > playSchedule.getCapacity()) {
             System.out.println("예매 가능 인원을 초과하였습니다.");
-            chosenMovie.remove(chosenMovie.size() - 1);
-            chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
     }
@@ -79,11 +77,9 @@ public class ReservationInfo {
     /*
      * 0 이하의 값 입력시 처리
      */
-    public void handleWrongPeople(PlaySchedule playSchedule, int people) {
+    public void handleWrongPeople(int people) {
         if (people <= 0) {
             System.out.println("잘못된 값을 입력하였습니다.");
-            chosenMovie.remove(chosenMovie.size() - 1);
-            chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
     }
@@ -94,7 +90,6 @@ public class ReservationInfo {
     public void judgeStartTime(LocalDateTime localDateTime) {
         if (localDateTime.isBefore(LocalDateTime.now())) {
             System.out.println("상영 시작 시간이 이미 지난 영화입니다.");
-            chosenMovie.remove(chosenMovie.size() - 1);
             throw new IllegalArgumentException();
         }
     }
@@ -107,9 +102,8 @@ public class ReservationInfo {
         for (int i = 0; i < chosenTimes.size() && answer == false; i++) {
             answer = answer || isOneHourWithinRange(chosenTimes.get(i), localDateTime);
         }
-        if ((chosenTimes.size() > 1) && (answer == true)) {
+        if ((chosenTimes.size() > 0) && (answer == true)) {
             System.out.println("두 영화의 시간 차이가 1시간 이내입니다.");
-            chosenMovie.remove(chosenMovie.size() - 1);
             throw new IllegalArgumentException();
         }
     }
@@ -125,16 +119,17 @@ public class ReservationInfo {
     }
 
     /*
-     * 예약 중간에 오류 발생시 복구
+     * 예약 중간에 오류 발생시 중간값 삭제
      */
-    public void recoveryCancelledPart() {
+    public void recoverCancelledPart() {
         int movieLen = chosenMovie.size();
         int timeLen = chosenTimes.size();
         int peopleLen = chosenPeople.size();
-        for (int i = 0; i < movieLen - peopleLen; i++) {
+
+        if (movieLen != peopleLen) {
             chosenMovie.remove(chosenMovie.size() - 1);
         }
-        for (int i = 0; i < timeLen - peopleLen; i++) {
+        if (timeLen != peopleLen) {
             chosenTimes.remove(chosenTimes.size() - 1);
         }
     }

@@ -84,7 +84,7 @@ public class MovieApplication {
      * Illegal argument exception 처리
      */
     public static void handleIllegalAraument(List<Movie> movies) {
-        reservationInfo.recoveryCancelledPart();
+        reservationInfo.recoverCancelledPart();
         System.out.println("취소된 예약을 다시 진행해주세요.\n");
         reserveUntilFine(movies);
     }
@@ -93,7 +93,6 @@ public class MovieApplication {
      * Input mismatch exception 처리
      */
     public static void handleInputMismatch() {
-        reservationInfo.recoveryCancelledPart();
         System.out.println("입력값이 잘못됐습니다 예약을 처음부터 다시 진행해주세요.\n");
         System.exit(-1);
     }
@@ -102,7 +101,7 @@ public class MovieApplication {
      * Index out of bounds exception 처리
      */
     public static void handleIndexOutOfBounds(List<Movie> movies) {
-        reservationInfo.recoveryCancelledPart();
+        reservationInfo.recoverCancelledPart();
         System.out.println("입력 범위를 벗어났습니다. 취소된 예약을 다시 진행해주세요.\n");
         reserveUntilFine(movies);
     }
