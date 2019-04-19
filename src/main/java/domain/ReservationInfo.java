@@ -124,4 +124,16 @@ public class ReservationInfo {
             chosenTimes.remove(chosenTimes.size() - 1);
         }
     }
+
+    /*
+     * 예약한 영화와 인원에 따른 비용 계산
+     */
+    public int howMuch() {
+        int money = 0;
+        for (int i = 0; i < chosenMovie.size(); i++) {
+            int movieValue = chosenMovie.get(i).getPlaySchedules().get(i).getCapacity();
+            money += movieValue * chosenPeople.get(i);
+        }
+        return money;
+    }
 }
