@@ -70,18 +70,39 @@ public class MovieApplication {
         try {
             reserverOrPurchase(movies);
         } catch (IllegalArgumentException e) {
-            reservationInfo.recoveryCancelledPart();
-            System.out.println("취소된 예약을 다시 진행해주세요.\n");
-            reserveUntilFine(movies);
+            handleIllegalAraument(movies);
         } catch (InputMismatchException e) {
-            reservationInfo.recoveryCancelledPart();
-            System.out.println("입력값이 잘못됐습니다 예약을 처음부터 다시 진행해주세요.\n");
-            System.exit(-1);
+            handleInputMismatch();
         } catch (IndexOutOfBoundsException e) {
-            reservationInfo.recoveryCancelledPart();
-            System.out.println("입력 범위를 벗어났습니다. 취소된 예약을 다시 진행해주세요.\n");
-            reserveUntilFine(movies);
+            handleIndexOutOfBounds(movies);
         }
+    }
+
+    /*
+     * Illegal argument exception 처리
+     */
+    public static void handleIllegalAraument(List<Movie> movies) {
+        reservationInfo.recoveryCancelledPart();
+        System.out.println("취소된 예약을 다시 진행해주세요.\n");
+        reserveUntilFine(movies);
+    }
+
+    /*
+     * Input mismatch exception 처리
+     */
+    public static void handleInputMismatch() {
+        reservationInfo.recoveryCancelledPart();
+        System.out.println("입력값이 잘못됐습니다 예약을 처음부터 다시 진행해주세요.\n");
+        System.exit(-1);
+    }
+
+    /*
+     * Index out of bounds exception 처리
+     */
+    public static void handleIndexOutOfBounds(List<Movie> movies) {
+        reservationInfo.recoveryCancelledPart();
+        System.out.println("입력 범위를 벗어났습니다. 취소된 예약을 다시 진행해주세요.\n");
+        reserveUntilFine(movies);
     }
 
     /*
