@@ -58,20 +58,34 @@ public class ReservationInfo {
      */
     public void addChosenPeople(int index, int people) {
         PlaySchedule playSchedule = chosenMovie.get(chosenMovie.size() - 1).getPlaySchedules().get(index - 1);
+        handleOverCapacity(playSchedule, people);
+        handleWrongPeople(playSchedule, people);
+        playSchedule.reserve(people);
+        chosenPeople.add(people);
+    }
+
+    /*
+     * 예약 가능 인원을 초과하여 예약하려는 경우 처리
+     */
+    public void handleOverCapacity(PlaySchedule playSchedule, int people) {
         if (people > playSchedule.getCapacity()) {
             System.out.println("예매 가능 인원을 초과하였습니다.");
             chosenMovie.remove(chosenMovie.size() - 1);
             chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
+    }
+
+    /*
+     * 0 이하의 값 입력시 처리
+     */
+    public void handleWrongPeople(PlaySchedule playSchedule, int people) {
         if (people <= 0) {
             System.out.println("잘못된 값을 입력하였습니다.");
             chosenMovie.remove(chosenMovie.size() - 1);
             chosenTimes.remove(chosenTimes.size() - 1);
             throw new IllegalArgumentException();
         }
-        playSchedule.reserve(people);
-        chosenPeople.add(people);
     }
 
     /*
