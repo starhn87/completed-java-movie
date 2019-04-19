@@ -16,7 +16,6 @@ public class MovieApplication {
 
         reserveUntilFine(movies);
         OutputView.printReservation(reservationInfo);
-        int point = InputView.inputPoint();
     }
 
     /*
@@ -68,4 +67,31 @@ public class MovieApplication {
         }
     }
 
+    /*
+     * 예약 완료 후 결제 과정 진행
+     */
+    public static int payPoint() {
+        int point = -1;
+        try {
+            point = InputView.inputPoint();
+            if (point < 0) {
+                throw new IllegalArgumentException();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+            payPoint();
+        } catch (IllegalArgumentException e) {
+            System.out.println("음수를 입력하셨습니다. 다시 입력해주세요.");
+            payPoint();
+        }
+        return point;
+    }
+
+    /*
+     * 최종 지불해야 할 금액 계산
+     */
+    public static int finalPayment(int cardOrCash) {
+        int money = reservationInfo.howMuch();
+        money -= payPoint();
+    }
 }
