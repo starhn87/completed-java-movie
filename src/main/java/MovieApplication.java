@@ -47,15 +47,12 @@ public class MovieApplication {
         int check = 0;
         while (check != 1) {
             reservationProgress(movies);
-            System.out.println(reservationInfo.getChosenMovie()
-                    + "\n" + reservationInfo.getChosenTimes() + "\n"
-                    + reservationInfo.getChosenPeople());
             check = InputView.inputReserveOrPurchase();
         }
     }
 
     /*
-     * 오류가 안나고 예약을 끝마칠 때까지 반복
+     * 오류없이 예약을 끝낼 때까지 반복
      */
     public static void reserveUntilFine(List<Movie> movies) {
         try {
@@ -76,7 +73,7 @@ public class MovieApplication {
     }
 
     /*
-     * 예약 완료 후 결제 과정 진행
+     * 예약 완료 후 포인트 사용할 지 여부
      */
     public static int payPoint() {
         int point = -1;
@@ -96,10 +93,37 @@ public class MovieApplication {
     }
 
     /*
-     * 최종 지불해야 할 금액 계산
+     * 신용카드 or 현금 선택
      */
-    public static int finalPayment(int cardOrCash) {
-        int money = reservationInfo.howMuch();
-        money -= payPoint();
+    public static int cardOrCash() {
+        int payingMethod = -1;
+        try {
+            payingMethod = InputView.inputCardOrCash();
+            if (!(payingMethod == 1 || payingMethod == 2)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+            cardOrCash();
+        } catch (IllegalArgumentException e) {
+            System.out.println("잘못된 범위의 값입니다. 다시 입력해주세요.");
+            cardOrCash();
+        }
+        return payingMethod;
+    }
+
+    /*
+     * 최종 지불할 금액 계산
+     */
+    public static int finalPayment(int point, int cardOrCash) {
+        double money = reservationInfo.howMuch();
+        money -= point;
+        if (cardOrCash == CARD) {
+            money = money * CARD_DISCOUNT;
+        }
+        if (cardOrCash == CASH) {
+            money = money * CASH_DISCOUNT;
+        }
+        return (int) money;
     }
 }
