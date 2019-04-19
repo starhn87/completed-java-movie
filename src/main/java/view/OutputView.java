@@ -24,8 +24,7 @@ public class OutputView {
         Movie movie = null;
         for (int i = 0; i < movies.size() && answer == false; i++) {
             movie = movies.get(i);
-            boolean recognize = false;
-            recognize = (movie.getId() == movieId) ? true : false;
+            boolean recognize = (movie.getId() == movieId) ? true : false;
             answer = answer || recognize;
         }
         if (answer == true) {
@@ -43,8 +42,16 @@ public class OutputView {
         List<Integer> people = reservationInfo.getChosenPeople();
         for (int i = 0; i < movies.size(); i++) {
             System.out.println(movies.get(i).toStringTitile());
-            System.out.println(format(times.get(i)));
+            System.out.println("시작시간: " + format(times.get(i)));
             System.out.println("예약 인원: " + people.get(i) + "명\n");
         }
+    }
+
+    /*
+     * 최종 결제 금액 출력
+     */
+    public static void printFinalPayment(int payment) {
+        System.out.println("\n최종 결제한 금액은 " + payment + "원입니다.");
+        System.out.println("예매를 완료했습니다. 즐거운 영화 관람되세요.");
     }
 }

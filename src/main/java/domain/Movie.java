@@ -22,6 +22,10 @@ public class Movie {
         return id;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     public List<PlaySchedule> getPlaySchedules() {
         return playSchedules;
     }
